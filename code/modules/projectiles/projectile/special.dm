@@ -178,8 +178,8 @@
 		var/pressure = environment.return_pressure()
 		if(pressure < 60)
 			name = "full strength [name]"
-			damage *= 4
-			range *= 2
+			damage *= 6
+			range *= 3
 	..()
 
 /obj/item/projectile/plasma/on_hit(atom/target)
@@ -192,7 +192,7 @@
 			return -1
 
 /obj/item/projectile/plasma/adv
-	damage = 7
+	damage = 8
 	range = 5
 
 /obj/item/projectile/plasma/adv/mech
