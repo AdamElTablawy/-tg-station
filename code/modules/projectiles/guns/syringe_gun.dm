@@ -79,3 +79,19 @@
 	force = 2 //Also very weak because it's smaller
 	suppressed = 1 //Softer fire sound
 	can_unsuppress = 0 //Permanently silenced
+
+/obj/item/weapon/gun/syringe/rapidsyringe/borg
+    name = "rapid syringe gun"
+    desc = "A modification of the syringe gun design, using a rotating cylinder and a 3D fabricator to synthesize and shoot up to 50 syringes. Unfortunately, it cannot produce more."
+    icon_state = "rapidsyringegun"
+    max_syringes = 50
+
+/obj/item/weapon/gun/syringe/rapidsyringe/borg/New()
+    ..()
+    for(var/i = 1 to max_syringes)
+        var/obj/item/weapon/reagent_containers/syringe/TEMP = new(src)
+        TEMP.reagents.add_reagent("pancuronium", 15)
+        syringes.Add(TEMP)
+
+/obj/item/weapon/gun/syringe/rapidsyringe/borg/attack_self(mob/user)
+	return
