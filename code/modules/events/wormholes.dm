@@ -1,8 +1,11 @@
+GLOBAL_LIST_EMPTY(all_wormholes) // So we can pick wormholes to teleport to
+
 /datum/round_event_control/wormholes
 	name = "Wormholes"
 	typepath = /datum/round_event/wormholes
 	max_occurrences = 3
 	weight = 2
+	min_players = 2
 
 
 /datum/round_event/wormholes
@@ -19,55 +22,56 @@
 	endWhen = rand(40, 80)
 
 /datum/round_event/wormholes/start()
-	for(var/turf/simulated/floor/T in world)
-		if(T.z == ZLEVEL_STATION)
+	for(var/turf/open/floor/T in world)
+		if(is_station_level(T.z))
 			pick_turfs += T
 
 	for(var/i = 1, i <= number_of_wormholes, i++)
 		var/turf/T = pick(pick_turfs)
-		wormholes += new /obj/effect/portal/wormhole(T, null, null, -1)
+		wormholes += new /obj/effect/portal/wormhole(T, null, 0, null, FALSE)
 
-/datum/round_event/wormholes/announce()
-	priority_announce("Space-time anomalies detected on the station. There is no additional data.", "Anomaly Alert", 'sound/AI/spanomalies.ogg')
+/datum/round_event/wormholes/announce(fake)
+	priority_announce("Space-time anomalies detected on the station. There is no additional data.", "Anomaly Alert", 'sound/ai/spanomalies.ogg')
 
 /datum/round_event/wormholes/tick()
 	if(activeFor % shift_frequency == 0)
 		for(var/obj/effect/portal/wormhole/O in wormholes)
 			var/turf/T = pick(pick_turfs)
 			if(T)
-				O.loc = T
+				O.forceMove(T)
 
 /datum/round_event/wormholes/end()
-	portals.Remove(wormholes)
-	for(var/obj/effect/portal/wormhole/O in wormholes)
-		O.loc = null
-	wormholes.Cut()
-
+	QDEL_LIST(wormholes)
+	wormholes = null
 
 /obj/effect/portal/wormhole
 	name = "wormhole"
 	desc = "It looks highly unstable; It could close at any moment."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "anom"
+	mech_sized = TRUE
 
-/obj/effect/portal/wormhole/attack_hand(mob/user)
-	teleport(user)
 
-/obj/effect/portal/wormhole/attackby(obj/item/I, mob/user, params)
-	teleport(user)
+/obj/effect/portal/wormhole/Initialize(mapload, _creator, _lifespan = 0, obj/effect/portal/_linked, automatic_link = FALSE, turf/hard_target_override, atmos_link_override)
+	. = ..()
+	GLOB.all_wormholes += src
+
+/obj/effect/portal/wormhole/Destroy()
+	. = ..()
+	GLOB.all_wormholes -= src
 
 /obj/effect/portal/wormhole/teleport(atom/movable/M)
-	if(istype(M, /obj/effect))	//sparks don't teleport
+	if(iseffect(M))	//sparks don't teleport
 		return
-	if(M.anchored && istype(M, /obj/mecha))
-		return
-
-	if(istype(M, /atom/movable))
-		var/turf/target
-		if(portals.len)
-			var/obj/effect/portal/P = pick(portals)
-			if(P && isturf(P.loc))
-				target = P.loc
-		if(!target)
+	if(M.anchored)
+		if(!(ismecha(M) && mech_sized))
 			return
-		do_teleport(M, target, 1, 1, 0, 0) ///You will appear adjacent to the beacon
+
+	if(ismovableatom(M))
+		if(GLOB.all_wormholes.len)
+			var/obj/effect/portal/wormhole/P = pick(GLOB.all_wormholes)
+			if(P && isturf(P.loc))
+				hard_target = P.loc
+		if(!hard_target)
+			return
+		do_teleport(M, hard_target, 1, 1, 0, 0, channel = TELEPORT_CHANNEL_WORMHOLE) ///You will appear adjacent to the beacon

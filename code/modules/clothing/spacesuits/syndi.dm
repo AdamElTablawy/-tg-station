@@ -1,20 +1,19 @@
 //Regular syndicate space suit
 /obj/item/clothing/head/helmet/space/syndicate
 	name = "red space helmet"
-	desc = "Top secret spess helmet."
 	icon_state = "syndicate"
 	item_state = "syndicate"
-	desc = "Has a tag: Totally not property of an enemy corporation, honest."
-	armor = list(melee = 40, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+	desc = "Has a tag on it: Totally not property of an enemy corporation, honest!"
+	armor = list("melee" = 40, "bullet" = 50, "laser" = 30,"energy" = 15, "bomb" = 30, "bio" = 30, "rad" = 30, "fire" = 80, "acid" = 85)
 
 /obj/item/clothing/suit/space/syndicate
 	name = "red space suit"
 	icon_state = "syndicate"
 	item_state = "space_suit_syndicate"
-	desc = "Has a tag on it: Totally not property of of a hostile corporation, honest!"
-	w_class = 3
-	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_box,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword/saber,/obj/item/weapon/restraints/handcuffs,/obj/item/weapon/tank/internals)
-	armor = list(melee = 40, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+	desc = "Has a tag on it: Totally not property of an enemy corporation, honest!"
+	w_class = WEIGHT_CLASS_NORMAL
+	allowed = list(/obj/item/gun, /obj/item/ammo_box, /obj/item/ammo_casing, /obj/item/melee/baton, /obj/item/melee/transforming/energy/sword/saber, /obj/item/restraints/handcuffs, /obj/item/tank/internals)
+	armor = list("melee" = 40, "bullet" = 50, "laser" = 30,"energy" = 15, "bomb" = 30, "bio" = 30, "rad" = 30, "fire" = 80, "acid" = 85)
 
 
 //Green syndicate space suit
@@ -51,7 +50,6 @@
 	name = "orange space suit"
 	icon_state = "syndicate-orange"
 	item_state = "syndicate-orange"
-
 
 //Blue syndicate space suit
 /obj/item/clothing/head/helmet/space/syndicate/blue
@@ -136,6 +134,22 @@
 	icon_state = "syndicate-black-red"
 	item_state = "syndicate-black-red"
 
+//Black-red syndicate contract varient
+/obj/item/clothing/head/helmet/space/syndicate/contract
+	name = "contractor helmet"
+	desc = "A specialised black and gold helmet that's more compact than its standard Syndicate counterpart. Can be ultra-compressed into even the tightest of spaces."
+	slowdown = 0.55
+	w_class = WEIGHT_CLASS_SMALL
+	icon_state = "syndicate-contract-helm"
+	item_state = "syndicate-contract-helm"
+
+/obj/item/clothing/suit/space/syndicate/contract
+	name = "contractor space suit"
+	desc = "A specialised black and gold space suit that's quicker, and more compact than its standard Syndicate counterpart. Can be ultra-compressed into even the tightest of spaces."
+	slowdown = 0.55
+	w_class = WEIGHT_CLASS_SMALL
+	icon_state = "syndicate-contract"
+	item_state = "syndicate-contract"
 
 //Black with yellow/red engineering syndicate space suit
 /obj/item/clothing/head/helmet/space/syndicate/black/engie
